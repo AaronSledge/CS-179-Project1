@@ -13,7 +13,7 @@ class Location:
 def FileRead(filename):
     file = open(filename)
 
-    array = []
+    listOfPoints = []
     number = 0
 
     while True:
@@ -26,21 +26,24 @@ def FileRead(filename):
             y = float(y)
             number = number + 1
             node = Location(number, x, y)
-            array.append(node)
+            listOfPoints.append(node)
         
     file.close()
-    return array
+    return listOfPoints
 
 def Euclidean(x1, y1, x2, y2):
     distance = math.sqrt(math.pow((x2 - x1), 2) + math.pow((y2 - x1), 2))
     return distance
 
 filename = input("Enter the name of file: ")
-array = FileRead(filename)
+listOfPoints = FileRead(filename)
+distanceMatrix = []
+for i in range(len(listOfPoints)):
+    row = []
+    for j in range(len(listOfPoints)):
+        row.append((Euclidean(listOfPoints[i].x, listOfPoints[i].y, listOfPoints[j].x, listOfPoints[j].x), listOfPoints[i], listOfPoints[j]))
+    distanceMatrix.append(row)
 
-d = Euclidean(array[1].x, array[1].y, array[2].x, array[2].x)
-
-print(d)
-
+print(len(distanceMatrix))
 
 
