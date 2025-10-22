@@ -41,7 +41,7 @@ print("\t Shortest Route Discovered So Far")
 
 while True:
     stopPoint = input()
-    if stopPoint == "s":
+    if stopPoint == "":
         break
     sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
     print(sumOfDistance)
