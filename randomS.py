@@ -2,4 +2,5 @@
 #Inputs: Memo table(euclidean distance), List of points(array), Sum of distance(float)
 #Returns: Sum of distance, path shown
 #Aaron
-
+def randomSearch(distances, listOfPoints, sumOfDistance):
+    return 0
