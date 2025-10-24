@@ -3,6 +3,12 @@
 #inputs: file with N locations, Enter key interpution(char or askii value)
 #Outputs: Sum of distance(int), paths of points(array), if solution is greater than 6000...(string), any error messaging(string)
 import math
+import DistanceMatrix
+from euclideanDistance import Euclidean
+import randomNN
+import ClassicNN
+import ModifiedNN
+import EarlyAbandoning
 
 class Location:
     def __init__(self, number, x, y):
@@ -31,16 +37,19 @@ def FileRead(filename):
     file.close()
     return array
 
-def Euclidean(x1, y1, x2, y2):
-    distance = math.sqrt(math.pow((x2 - x1), 2) + math.pow((y2 - x1), 2))
-    return distance
-
 filename = input("Enter the name of file: ")
 array = FileRead(filename)
 
-d = Euclidean(array[1].x, array[1].y, array[2].x, array[2].x)
+length = len(array)
+# for i in range(length):
+#     if i == 0:
+#         print(f'Length of array: {length}')
+#     node = array[i]
+#     print(f'Node {node.number}, ({node.x}, {node.y})')
 
-print(d)
+# calculate distance matrix here, but how do we do make this matrix?
+dist_mat = DistanceMatrix.dist_matrix(array)
+print(dist_mat)
 
-
-
+# pass dist matrix as a parameter to the RandomNN function?
+#solution = randomNN(dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
