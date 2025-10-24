@@ -1,4 +1,4 @@
-#handles the input and output to the CLI and file
+#handles the input and output to the CLI and file. Keep track of time
 #Kenny/michael
 #inputs: file with N locations, Enter key interpution(char or askii value)
 #Outputs: Sum of distance(int), paths of points(array), if solution is greater than 6000...(string), any error messaging(string)
@@ -9,6 +9,9 @@ import randomNN
 import ClassicNN
 import ModifiedNN
 import EarlyAbandoning
+from randomS import randomSearch
+import threading
+import time
 
 class Location:
     def __init__(self, number, x, y):
@@ -19,7 +22,7 @@ class Location:
 def FileRead(filename):
     file = open(filename)
 
-    array = []
+    listOfPoints = []
     number = 0
 
     while True:
@@ -32,13 +35,48 @@ def FileRead(filename):
             y = float(y)
             number = number + 1
             node = Location(number, x, y)
-            array.append(node)
+            listOfPoints.append(node)
         
     file.close()
-    return array
+    return listOfPoints
+
+isDone = False
+collectionOfDistance = []
+finalPath = []
+
+def printSum(sumOfDistance, listOfPoints):
+    global collectionOfDistance, finalPath #so variables are mutable within thread and function
+    start_time = time.time()
+    while not isDone:
+        time.sleep(0.5) #code pauses half a second. Can change if needed to
+        sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
+        time_So_Far = time.time() - start_time 
+        collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
+        finalPath = path
+        print(f"\t \t {sumOfDistance}")
+
 
 filename = input("Enter the name of file: ")
-array = FileRead(filename)
+listOfPoints = FileRead(filename)
+
+
+
+print(f"There are {(len(listOfPoints))}, computing route...")
+print("\t Shortest Route Discovered So Far")
+
+threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
+
+
+input()
+isDone = True
+
+#print(collectionOfDistance) uncomment this to see array of distance and time(in seconds)assoicated with
+
+
+
+
+
+
 
 length = len(array)
 # for i in range(length):
@@ -46,6 +84,8 @@ length = len(array)
 #         print(f'Length of array: {length}')
 #     node = array[i]
 #     print(f'Node {node.number}, ({node.x}, {node.y})')
+
+
 
 # calculate distance matrix here, but how do we do make this matrix?
 dist_mat = DistanceMatrix.dist_matrix(array)
