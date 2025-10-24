@@ -3,6 +3,12 @@
 #inputs: file with N locations, Enter key interpution(char or askii value)
 #Outputs: Sum of distance(int), paths of points(array), if solution is greater than 6000...(string), any error messaging(string)
 import math
+import DistanceMatrix
+from euclideanDistance import Euclidean
+import randomNN
+import ClassicNN
+import ModifiedNN
+import EarlyAbandoning
 from randomS import randomSearch
 import threading
 import time
@@ -72,7 +78,18 @@ isDone = True
 
 
 
+length = len(array)
+# for i in range(length):
+#     if i == 0:
+#         print(f'Length of array: {length}')
+#     node = array[i]
+#     print(f'Node {node.number}, ({node.x}, {node.y})')
 
 
 
+# calculate distance matrix here, but how do we do make this matrix?
+dist_mat = DistanceMatrix.dist_matrix(array)
+print(dist_mat)
 
+# pass dist matrix as a parameter to the RandomNN function?
+#solution = randomNN(dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
