@@ -3,6 +3,7 @@
 #inputs: file with N locations, Enter key interpution(char or askii value)
 #Outputs: Sum of distance(int), paths of points(array), if solution is greater than 6000...(string), any error messaging(string)
 import math
+import keyboard
 
 class Location:
     def __init__(self, number, x, y):
@@ -41,6 +42,12 @@ array = FileRead(filename)
 d = Euclidean(array[1].x, array[1].y, array[2].x, array[2].x)
 
 print(d)
+
+while True:
+    if keyboard.read_key() == "Enter":
+        break
+
+
 
 
 
