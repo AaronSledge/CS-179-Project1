@@ -3,6 +3,7 @@
 #inputs: file with N locations, Enter key interpution(char or askii value)
 #Outputs: Sum of distance(int), paths of points(array), if solution is greater than 6000...(string), any error messaging(string)
 import math
+import numpy as np
 import DistanceMatrix
 from euclideanDistance import Euclidean
 import randomNN
@@ -51,5 +52,19 @@ length = len(array)
 dist_mat = DistanceMatrix.dist_matrix(array)
 print(dist_mat)
 
+print(f'Dimensions of dist_mat: {len(dist_mat)} x {len(dist_mat[0])}')
+
+dist_mat_delete_row = np.delete(dist_mat, 0, 0)
+print(f'Dimensions of dist_mat after deleting a row: {len(dist_mat_delete_row)} x {len(dist_mat_delete_row[0])}')
+
+print(f'Dimensions of dist_mat: {len(dist_mat)} x {len(dist_mat[0])}')
+
 # pass dist matrix as a parameter to the RandomNN function?
-#solution = randomNN(dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
+# solution = randomNN(array, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
+print()
+print()
+print()
+solution_path, bsf, visited_nodes = ClassicNN.ClassicNN(array, dist_mat)
+print(solution_path)
+print(f'Initial BSF: {bsf}')
+print(f'Visited Nodes: {visited_nodes}')
