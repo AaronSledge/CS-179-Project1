@@ -79,7 +79,7 @@ isDone = True
 
 
 
-length = len(array)
+length = len(listOfPoints)
 # for i in range(length):
 #     if i == 0:
 #         print(f'Length of array: {length}')
@@ -89,7 +89,7 @@ length = len(array)
 
 
 # calculate distance matrix here, but how do we do make this matrix?
-dist_mat = DistanceMatrix.dist_matrix(array)
+dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
 print(dist_mat)
 
 print(f'Dimensions of dist_mat: {len(dist_mat)} x {len(dist_mat[0])}')
@@ -104,7 +104,7 @@ print(f'Dimensions of dist_mat: {len(dist_mat)} x {len(dist_mat[0])}')
 print()
 print()
 print()
-solution_path, bsf, visited_nodes = ClassicNN.ClassicNN(array, dist_mat)
+solution_path, bsf, visited_nodes = ClassicNN.ClassicNN(listOfPoints, dist_mat)
 print(solution_path)
 print(f'Initial BSF: {bsf}')
 print(f'Visited Nodes: {visited_nodes}')
