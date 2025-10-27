@@ -62,14 +62,14 @@ listOfPoints = FileRead(filename)
 
 
 
-print(f"There are {(len(listOfPoints))}, computing route...")
-print("\t Shortest Route Discovered So Far")
+# print(f"There are {(len(listOfPoints))}, computing route...")
+# print("\t Shortest Route Discovered So Far")
 
-threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
+# threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
 
-input()
-isDone = True
+# input()
+# isDone = True
 
 #print(collectionOfDistance) uncomment this to see array of distance and time(in seconds)assoicated with
 
@@ -77,14 +77,10 @@ isDone = True
 
 
 
-
-
+for i in range(len(listOfPoints)):
+    node = listOfPoints[i]
+    print(f'{node.number}, ({node.x}, {node.y})')
 length = len(listOfPoints)
-# for i in range(length):
-#     if i == 0:
-#         print(f'Length of array: {length}')
-#     node = array[i]
-#     print(f'Node {node.number}, ({node.x}, {node.y})')
 
 
 
@@ -94,17 +90,16 @@ print(dist_mat)
 
 print(f'Dimensions of dist_mat: {len(dist_mat)} x {len(dist_mat[0])}')
 
-dist_mat_delete_row = np.delete(dist_mat, 0, 0)
-print(f'Dimensions of dist_mat after deleting a row: {len(dist_mat_delete_row)} x {len(dist_mat_delete_row[0])}')
-
-print(f'Dimensions of dist_mat: {len(dist_mat)} x {len(dist_mat[0])}')
-
 # pass dist matrix as a parameter to the RandomNN function?
 # solution = randomNN(array, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
 print()
 print()
 print()
-solution_path, bsf, visited_nodes = ClassicNN.ClassicNN(listOfPoints, dist_mat)
-print(solution_path)
-print(f'Initial BSF: {bsf}')
-print(f'Visited Nodes: {visited_nodes}')
+# solution_path, bsf, visited_nodes = ClassicNN.ClassicNN(listOfPoints, dist_mat)
+# print(solution_path)
+# print(f'Initial BSF: {bsf}')
+# print(f'Visited Nodes: {visited_nodes}')
+
+print(f"Distance from launch pad to first location: {dist_mat[0][1]}")
+print(f"Distance from launch pad to 2nd index location (Euclidean function): {Euclidean(listOfPoints[0].x, listOfPoints[0].y, listOfPoints[2].x, listOfPoints[2].y)}")
+print(f"Distance from launch pad to 125th index location (Euclidean function): {Euclidean(listOfPoints[0].x, listOfPoints[0].y, listOfPoints[125].x, listOfPoints[125].y)}")

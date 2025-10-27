@@ -1,5 +1,6 @@
 from euclideanDistance import Euclidean
 import numpy as np
+import heapq as hq
 
 class Location:
     def __init__(self, number, x, y):
@@ -18,6 +19,10 @@ def ClassicNN(pts_array, dist_matrix, calculate_dist = Euclidean):
     
     # isolate the intermediate nodes so that we don't visit the launching pad again before visiting all other nodes first
     dist_matrix_interm = np.delete(dist_matrix, num_interm_nodes, 1)
+    dist_matrix_interm = np.delete(dist_matrix_interm, num_interm_nodes, 0)
+
+    print(f'Number of Rows: {len(dist_matrix_interm)}')
+    print(f'Number of Columns: {len(dist_matrix_interm[0])}')
 
     #sumOfDistance = 7000
     curr_dist = 0
@@ -26,7 +31,7 @@ def ClassicNN(pts_array, dist_matrix, calculate_dist = Euclidean):
     visited = set()
     
     curr_node = pts_array[0]
-    exceptions = []
+    exceptions = set()
 
     while (len(visited) != num_interm_nodes) and (curr_node.number not in visited):
         # how do we make sure that we are getting a distance from the upper right triangle?
@@ -34,22 +39,23 @@ def ClassicNN(pts_array, dist_matrix, calculate_dist = Euclidean):
         visited.add(curr_node.number)
         path.append(curr_node.number)
 
+        zero_exceptions = list(range(0, curr_node.number))
+        zero_exceptions = set(zero_exceptions)
+
         exception = curr_node.number - 1
-        exceptions.append(exception)
-        print(f'Current node being visited: {curr_node.number}')
+        print(exception)
 
-        # what if the closest node has already been visited? How do we go to the next closest node?
-        # if a node has already been visited, should we just remove it from the matrix? Yes
-        dist_matrix_interm2 = dist_matrix_interm[:][exceptions]
-        # every time i do this ^, it resets the indices. Is there any way to not reset them to make the slicing easier?? How can I do this?
-
-        neighbor_nodes = dist_matrix_interm2[curr_node.number - 1]
-
-        closest_node_idx = np.argmin(neighbor_nodes)
-        if (exception <= closest_node_idx):
-            closest_node_idx += 1
+        neighbor_nodes = dist_matrix_interm[exception]
+        
+        print(f"For loop stuff")
+        closest_node_idx = -1
+        closest_node_dist = 7000
+        for i in range(exception, len(neighbor_nodes) - 1):
+            if (i != exception) and (i+1 not in visited) and (neighbor_nodes[i] < closest_node_dist):
+                closest_node_dist = neighbor_nodes[i]
+        print(closest_node_idx)
+        print(closest_node_dist)
         closest_node = pts_array[closest_node_idx]
-        closest_node_dist = np.min(neighbor_nodes)
 
         curr_dist += closest_node_dist
         curr_node = closest_node

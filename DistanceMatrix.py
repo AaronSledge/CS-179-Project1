@@ -6,7 +6,7 @@ def dist_matrix(points_array):
     n = len(points_array)
     matrix = [[float(0) for i in range(n)] for j in range(n)]
     matrix = np.array(matrix)
-    print(f"Start of Distance Matrix (dim = {n}x{n}):")
+    print(f"Start of Distance Matrix (dim = {len(matrix)}x{len(matrix[0])}):")
     
     num_rows = len(matrix)
     num_cols = len(matrix[0])
