@@ -43,17 +43,20 @@ def FileRead(filename):
 isDone = False
 collectionOfDistance = []
 finalPath = []
-
+prev = 0
 def printSum(sumOfDistance, listOfPoints):
-    global collectionOfDistance, finalPath #so variables are mutable within thread and function
+    global collectionOfDistance, finalPath, prev #so variables are mutable within thread and function
     start_time = time.time()
     while not isDone:
-        time.sleep(0.5) #code pauses half a second. Can change if needed to
+        time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
-        time_So_Far = time.time() - start_time 
-        collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
-        finalPath = path
-        print(f"\t \t {sumOfDistance}")
+        if prev != sumOfDistance:
+            time_So_Far = time.time() - start_time 
+            collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
+            finalPath = path #for jason when making route graph
+            print(f"\t \t {sumOfDistance}")
+        prev = sumOfDistance  
+        
 
 
 filename = input("Enter the name of file: ")
@@ -66,19 +69,17 @@ print("\t Shortest Route Discovered So Far")
 
 threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
-
 input()
 isDone = True
 
-#print(collectionOfDistance) uncomment this to see array of distance and time(in seconds)assoicated with
+print(finalPath[3].x)
 
 
 
 
 
 
-
-length = len(array)
+length = len(listOfPoints)
 # for i in range(length):
 #     if i == 0:
 #         print(f'Length of array: {length}')
@@ -88,8 +89,8 @@ length = len(array)
 
 
 # calculate distance matrix here, but how do we do make this matrix?
-dist_mat = DistanceMatrix.dist_matrix(array)
-print(dist_mat)
+dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
+#print(dist_mat)
 
 # pass dist matrix as a parameter to the RandomNN function?
 #solution = randomNN(dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
