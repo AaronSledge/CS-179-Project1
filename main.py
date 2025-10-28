@@ -5,6 +5,7 @@
 import math
 import DistanceMatrix
 from euclideanDistance import Euclidean
+from route import saveRouteImg
 import randomNN
 import ClassicNN
 import ModifiedNN
@@ -56,6 +57,8 @@ def printSum(sumOfDistance, listOfPoints):
             finalPath = path #for jason when making route graph
             print(f"\t \t {sumOfDistance}")
         prev = sumOfDistance  
+        
+    saveRouteImg(listOfPoints, finalPath, prev, filename)
         
 
 
