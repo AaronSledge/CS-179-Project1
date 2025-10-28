@@ -5,10 +5,11 @@
 import math
 import DistanceMatrix
 from euclideanDistance import Euclidean
-#import randomNN
-#import ClassicNN
-#import ModifiedNN
-#import EarlyAbandoning
+from route import saveRouteImg
+import randomNN
+import ClassicNN
+import ModifiedNN
+import EarlyAbandoning
 from randomS import randomSearch
 import threading
 import time
@@ -43,24 +44,27 @@ def FileRead(filename):
 isDone = False
 collectionOfDistance = []
 finalPath = []
-
+prev = 0
 def printSum(sumOfDistance, listOfPoints):
-    global collectionOfDistance, finalPath #so variables are mutable within thread and function
+    global collectionOfDistance, finalPath, prev #so variables are mutable within thread and function
     start_time = time.time()
     i = 1
     while not isDone:
         time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
-        time_So_Far = time.time() - start_time 
-        collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
-        if i == 1:
-            finalPath = path
+        if prev != sumOfDistance:
+            time_So_Far = time.time() - start_time 
+            collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
+            finalPath = path #for jason when making route graph
             print(f"\t \t {sumOfDistance}")
-        else:
-            if sumOfDistance < collectionOfDistance[-2][0]:
-                finalPath = path
-                print(f"\t \t {sumOfDistance}")
-        i += i 
+        prev = sumOfDistance  
+        
+    saveRouteImg(listOfPoints, finalPath, prev, filename)
+        
+
+def writeToDistanceFile(collectionOfDistance):
+    with open("distanceFileRandomS.txt", "a") as file:
+        file.write(str(collectionOfDistance) + "\n")
 
 filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
@@ -77,15 +81,14 @@ with open(f"{filename}_SOLUTION_{collectionOfDistance[-1][0]}", "w") as outFile:
     for i in finalPath:
         outFile.write(f"{i.number} \n")
 
-#print(collectionOfDistance) uncomment this to see array of distance and time(in seconds)assoicated with
+writeToDistanceFile(collectionOfDistance)
 
 
 
 
 
 
-
-#length = len(array)
+length = len(listOfPoints)
 # for i in range(length):
 #     if i == 0:
 #         print(f'Length of array: {length}')
@@ -95,7 +98,7 @@ with open(f"{filename}_SOLUTION_{collectionOfDistance[-1][0]}", "w") as outFile:
 
 
 # calculate distance matrix here, but how do we do make this matrix?
-#dist_mat = DistanceMatrix.dist_matrix(array)
+dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
 #print(dist_mat)
 
 # pass dist matrix as a parameter to the RandomNN function?
