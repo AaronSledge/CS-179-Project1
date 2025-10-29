@@ -68,6 +68,7 @@ def writeToDistanceFile(collectionOfDistance):
 
 filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
+listOfPoints[-1].number = 1;
 
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
