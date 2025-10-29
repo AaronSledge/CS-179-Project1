@@ -48,6 +48,7 @@ prev = 0
 def printSum(sumOfDistance, listOfPoints):
     global collectionOfDistance, finalPath, prev #so variables are mutable within thread and function
     start_time = time.time()
+    i = 1
     while not isDone:
         time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
@@ -68,15 +69,17 @@ def writeToDistanceFile(collectionOfDistance):
 filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
 
-
-
-print(f"There are {(len(listOfPoints))}, computing route...")
+print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
 
 threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
 input()
 isDone = True
+
+with open(f"{filename}_SOLUTION_{collectionOfDistance[-1][0]}", "w") as outFile:
+    for i in finalPath:
+        outFile.write(f"{i.number} \n")
 
 writeToDistanceFile(collectionOfDistance)
 
