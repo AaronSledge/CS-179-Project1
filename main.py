@@ -61,6 +61,9 @@ def printSum(sumOfDistance, listOfPoints):
     saveRouteImg(listOfPoints, finalPath, prev, filename)
         
 
+def writeToDistanceFile(collectionOfDistance):
+    with open("distanceFileRandomS.txt", "a") as file:
+        file.write(str(collectionOfDistance) + "\n")
 
 filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
@@ -75,7 +78,7 @@ threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used t
 input()
 isDone = True
 
-print(finalPath[3].x)
+writeToDistanceFile(collectionOfDistance)
 
 
 
