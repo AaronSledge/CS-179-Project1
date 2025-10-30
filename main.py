@@ -10,7 +10,7 @@ from route import saveRouteImg
 from distancePlot import analyzeDistance
 import randomNN
 from ClassicNN import ClassicNN
-import ModifiedNN
+from ModifiedNN import ModifiedNN
 import EarlyAbandoning
 from randomS import randomSearch
 import threading
@@ -111,13 +111,21 @@ dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
 #print(dist_mat)
 
 # pass dist matrix as a parameter to the RandomNN function?
-# solution = randomNN(array, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
+# solution_path, solution_dist = RandomNN(listOfPoints, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN)
 
 print("     ClassicNN Stuff:")
-path, curr_dist, visited, not_visited = ClassicNN(listOfPoints, dist_mat, calculate_dist=Euclidean)
+path, curr_dist, visited, not_visited = ClassicNN(listOfPoints, dist_mat)
+print(f"Current Distance (bsf): {curr_dist}")
+print("     DONE")
+# print(f"Path: {path}")
+# print(f"Distance: {curr_dist}")
+# print(f"Indices Visted Nodes: {visited}")
+# print(f"Indices Not Visited: {not_visited}")
+
+print("     ModifiedNN Stuff:")
+path, curr_dist, visited, not_visited = ModifiedNN(listOfPoints, dist_mat, path, curr_dist)
+
 print(f"Path: {path}")
 print(f"Distance: {curr_dist}")
 print(f"Indices Visted Nodes: {visited}")
 print(f"Indices Not Visited: {not_visited}")
-
-print("     ModifiedNN Stuff:")
