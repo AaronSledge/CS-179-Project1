@@ -75,7 +75,8 @@ listOfPoints[-1].number = 1;
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
 
-# threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
+#source threading https://www.youtube.com/watch?v=A_Z1lgZLSNc
+threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
 input()
 isDone = True
