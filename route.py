@@ -84,7 +84,7 @@ def saveRouteImg(listOfPoints, finalPath, sumOfDistance, input_filename):
     D = int(round(sumOfDistance))
     fileSaveName = f"{baseName}_SOLUTION_{D}.png"
 
-    # --- find Desktop path ---
+    # find path on computer
     desktop = os.path.join(os.path.expanduser("~"), "Desktop")
     oneDrive = os.path.join(os.path.expanduser("~"), "OneDrive", "Desktop")
     if os.path.isdir(oneDrive):
@@ -93,7 +93,7 @@ def saveRouteImg(listOfPoints, finalPath, sumOfDistance, input_filename):
     os.makedirs(desktop, exist_ok=True)
     full_path = os.path.join(desktop, fileSaveName)
 
-    # --- save the image ---
+    # save image to disk
     img.save(full_path)
-    print(f"Image saved to: {full_path}")
+    
     return full_path
