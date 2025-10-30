@@ -7,6 +7,7 @@ import numpy as np
 import DistanceMatrix
 from euclideanDistance import Euclidean
 from route import saveRouteImg
+from distancePlot import analyzeDistance
 import randomNN
 from ClassicNN import ClassicNN
 import ModifiedNN
@@ -88,6 +89,9 @@ with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}", "w")
 
 writeToDistanceFile(collectionOfDistance)
 
+nameFileOne = "distanceFileRandomS.txt"
+
+analyzeDistance(nameFileOne)
 
 
 
