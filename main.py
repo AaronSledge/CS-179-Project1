@@ -6,13 +6,15 @@ import math
 import numpy as np
 import DistanceMatrix
 from euclideanDistance import Euclidean
-from randomNN import RandomNN
+from route import saveRouteImg
+import randomNN
 from ClassicNN import ClassicNN
 from ModifiedNN import ModifiedNN
 import EarlyAbandoning
 from randomS import randomSearch
 import threading
 import time
+import os
 
 class Location:
     def __init__(self, number, x, y):
@@ -44,47 +46,66 @@ def FileRead(filename):
 isDone = False
 collectionOfDistance = []
 finalPath = []
-
+prev = 0
 def printSum(sumOfDistance, listOfPoints):
-    global collectionOfDistance, finalPath #so variables are mutable within thread and function
+    global collectionOfDistance, finalPath, prev #so variables are mutable within thread and function
     start_time = time.time()
+    i = 1
     while not isDone:
-        time.sleep(0.5) #code pauses half a second. Can change if needed to
+        time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
-        time_So_Far = time.time() - start_time 
-        collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
-        finalPath = path
-        print(f"\t \t {sumOfDistance}")
+        if prev != sumOfDistance:
+            time_So_Far = time.time() - start_time 
+            collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
+            finalPath = path #for jason when making route graph
+            print(f"\t \t {sumOfDistance}")
+        prev = sumOfDistance  
+        
+    saveRouteImg(listOfPoints, finalPath, prev, filename)
+        
 
+def writeToDistanceFile(collectionOfDistance):
+    with open("distanceFileRandomS.txt", "a") as file:
+        file.write(str(collectionOfDistance) + "\n")
 
 filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
+listOfPoints[-1].number = 1;
+
+print(f"There are {(len(listOfPoints))} nodes, computing route...")
+print("\t Shortest Route Discovered So Far")
+
+threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
+
+input()
+isDone = True
+
+filename = os.path.splitext(os.path.basename(filename))[0]
+# this writes the solution for which nodes to visit e.g. "1 2 10 3 1"
+with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}", "w") as outFile:
+    for i in finalPath:
+        outFile.write(f"{i.number} \n")
+
+writeToDistanceFile(collectionOfDistance)
 
 
 
-# print(f"There are {(len(listOfPoints))}, computing route...")
-# print("\t Shortest Route Discovered So Far")
-
-# threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
-
-
-# input()
-# isDone = True
-
-#print(collectionOfDistance) uncomment this to see array of distance and time(in seconds)assoicated with
-
-# for i in range(len(listOfPoints)):
-#     node = listOfPoints[i]
-#     print(f'{node.number}, ({node.x}, {node.y})')
-# length = len(listOfPoints)
-print()
 
 
 
-# calculate distance matrix here
+length = len(listOfPoints)
+# for i in range(length):
+#     if i == 0:
+#         print(f'Length of array: {length}')
+#     node = array[i]
+#     print(f'Node {node.number}, ({node.x}, {node.y})')
+
+
+
+# calculate distance matrix here, but how do we do make this matrix?
 dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
+#print(dist_mat)
 
-print("RandomNN Stuff:")
 # pass dist matrix as a parameter to the RandomNN function?
 # solution_path, solution_dist = RandomNN(listOfPoints, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN)
 
