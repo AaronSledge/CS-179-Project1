@@ -13,6 +13,7 @@ import EarlyAbandoning
 from randomS import randomSearch
 import threading
 import time
+import os
 
 class Location:
     def __init__(self, number, x, y):
@@ -78,7 +79,9 @@ threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used t
 input()
 isDone = True
 
-with open(f"{filename}_SOLUTION_{collectionOfDistance[-1][0]}", "w") as outFile:
+filename = os.path.splitext(os.path.basename(filename))[0]
+# this writes the solution for which nodes to visit e.g. "1 2 10 3 1"
+with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}", "w") as outFile:
     for i in finalPath:
         outFile.write(f"{i.number} \n")
 
