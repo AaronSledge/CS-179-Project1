@@ -15,13 +15,13 @@ def analyzeDistance(filename, maxTime = 600, numPoints = 100):
         for line in f:
             if line.strip():
                 try:
-                    run = ast.literalEval(line.strip())
+                    run = ast.literal_eval(line.strip())
                     runs.append(run)
                 except Exception as e:
                     print(f"Error with parsing line: {line}\n{e}")
                     
     # making time grid
-    timeGrid = np.linespace(0, maxTime, numPoints)
+    timeGrid = np.linspace(0, maxTime, numPoints)
     
     interpolatedRuns = []
     
@@ -34,7 +34,7 @@ def analyzeDistance(filename, maxTime = 600, numPoints = 100):
         # sorting the data by time
         sortIdx = np.argsort(times)
         times = times[sortIdx]
-        distances = distances{sortIdx}
+        distances = distances[sortIdx]
         
         # interpolation over the grid
         interpDistances = np.interp(timeGrid, times, distances)
@@ -44,7 +44,7 @@ def analyzeDistance(filename, maxTime = 600, numPoints = 100):
     interpolatedRuns = np.array(interpolatedRuns)
     
     # computes the mean distance across all runs at each of the times
-    meanDist = np.mean(interpDistances, axis = 0)
+    meanDist = np.mean(interpolatedRuns, axis = 0)
     
     # plotting
     
