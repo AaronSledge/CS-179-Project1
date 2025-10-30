@@ -7,6 +7,7 @@ import numpy as np
 import DistanceMatrix
 from euclideanDistance import Euclidean
 from route import saveRouteImg
+from distancePlot import analyzeDistance
 import randomNN
 from ClassicNN import ClassicNN
 from ModifiedNN import ModifiedNN
@@ -50,7 +51,6 @@ prev = 0
 def printSum(sumOfDistance, listOfPoints):
     global collectionOfDistance, finalPath, prev #so variables are mutable within thread and function
     start_time = time.time()
-    i = 1
     while not isDone:
         time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
@@ -75,6 +75,7 @@ listOfPoints[-1].number = 1;
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
 
+#source threading https://www.youtube.com/watch?v=A_Z1lgZLSNc
 threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
 input()
@@ -88,6 +89,9 @@ with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}", "w")
 
 writeToDistanceFile(collectionOfDistance)
 
+nameFileOne = "distanceFileRandomS.txt"
+
+analyzeDistance(nameFileOne)
 
 
 
