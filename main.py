@@ -7,7 +7,7 @@ import numpy as np
 import DistanceMatrix
 from euclideanDistance import Euclidean
 import randomNN
-import ClassicNN
+from ClassicNN import ClassicNN
 import ModifiedNN
 import EarlyAbandoning
 from randomS import randomSearch
@@ -73,33 +73,26 @@ listOfPoints = FileRead(filename)
 
 #print(collectionOfDistance) uncomment this to see array of distance and time(in seconds)assoicated with
 
-
-
-
-
 for i in range(len(listOfPoints)):
     node = listOfPoints[i]
     print(f'{node.number}, ({node.x}, {node.y})')
 length = len(listOfPoints)
+print()
 
 
 
-# calculate distance matrix here, but how do we do make this matrix?
+# calculate distance matrix here
 dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
-print(dist_mat)
 
-print(f'Dimensions of dist_mat: {len(dist_mat)} x {len(dist_mat[0])}')
-
+print("RandomNN Stuff:")
 # pass dist matrix as a parameter to the RandomNN function?
 # solution = randomNN(array, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
-print()
-print()
-print()
-# solution_path, bsf, visited_nodes = ClassicNN.ClassicNN(listOfPoints, dist_mat)
-# print(solution_path)
-# print(f'Initial BSF: {bsf}')
-# print(f'Visited Nodes: {visited_nodes}')
 
-print(f"Distance from launch pad to first location: {dist_mat[0][1]}")
-print(f"Distance from launch pad to 2nd index location (Euclidean function): {Euclidean(listOfPoints[0].x, listOfPoints[0].y, listOfPoints[2].x, listOfPoints[2].y)}")
-print(f"Distance from launch pad to 125th index location (Euclidean function): {Euclidean(listOfPoints[0].x, listOfPoints[0].y, listOfPoints[125].x, listOfPoints[125].y)}")
+print("     ClassicNN Stuff:")
+path, curr_dist, visited, not_visited = ClassicNN(listOfPoints, dist_mat, calculate_dist=Euclidean)
+print(f"Path: {path}")
+print(f"Distance: {curr_dist}")
+print(f"Indices Visted Nodes: {visited}")
+print(f"Indices Not Visited: {not_visited}")
+
+print("     ModifiedNN Stuff:")

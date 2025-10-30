@@ -21,60 +21,67 @@ def ClassicNN(pts_array, dist_matrix, calculate_dist = Euclidean):
     dist_matrix_interm = np.delete(dist_matrix, num_interm_nodes, 1)
     dist_matrix_interm = np.delete(dist_matrix_interm, num_interm_nodes, 0)
 
-    print(f'Number of Rows: {len(dist_matrix_interm)}')
-    print(f'Number of Columns: {len(dist_matrix_interm[0])}')
+    # dimensions should be 127 x 127 now since we removed the last column and row
+    # print(f'Number of Rows: {len(dist_matrix_interm)}')
+    # print(f'Number of Columns: {len(dist_matrix_interm[0])}')
 
     #sumOfDistance = 7000
     curr_dist = 0
     path = []
 
-    visited = set()
+    idx_visited = set()
+
+    # add all indexes to the not visited set
+    idx_not_visited = set()
+    for i in range(0, num_interm_nodes):
+        idx_not_visited.add(i)
     
+    # at this point curr_node is node 1 with coordinates = (82.0, 50.0)
     curr_node = pts_array[0]
-    exceptions = set()
 
-    while (len(visited) != num_interm_nodes) and (curr_node.number not in visited):
-        # how do we make sure that we are getting a distance from the upper right triangle?
-        # we could look at the indexes, of the neigboring nodes, that are greater than the current nodes index
-        visited.add(curr_node.number)
+    while (len(idx_visited) != num_interm_nodes-1) and ((curr_node.number - 1) not in idx_visited) and (bool(idx_not_visited) == True):
+        # add current node to visited set and path, and remove the current node index from the not visited set (essentially swap the indices)
+        curr_node_idx = curr_node.number - 1
+        idx_visited.add(curr_node_idx)
+        idx_not_visited.remove(curr_node_idx)
         path.append(curr_node.number)
-
-        zero_exceptions = list(range(0, curr_node.number))
-        zero_exceptions = set(zero_exceptions)
-
-        exception = curr_node.number - 1
-        print(exception)
-
-        neighbor_nodes = dist_matrix_interm[exception]
         
-        print(f"For loop stuff")
         closest_node_idx = -1
         closest_node_dist = 7000
-        for i in range(exception, len(neighbor_nodes) - 1):
-            if (i != exception) and (i+1 not in visited) and (neighbor_nodes[i] < closest_node_dist):
-                closest_node_dist = neighbor_nodes[i]
-        print(closest_node_idx)
-        print(closest_node_dist)
+        for idx, i in enumerate(idx_not_visited):
+            # if the ith index is greater than the current index then we can access using the current index as the row
+            if (i > curr_node_idx):
+                if (dist_matrix_interm[curr_node_idx][i] < closest_node_dist):
+                    closest_node_dist = dist_matrix_interm[curr_node_idx][i]
+                    closest_node_idx = i
+            # if the ith index is less than the current index, then we can access using the current index as the column instead
+            elif (i < curr_node_idx):
+                if (dist_matrix_interm[i][curr_node_idx] < closest_node_dist):
+                    closest_node_dist = dist_matrix_interm[i][curr_node_idx]
+                    closest_node_idx = i
+            else:
+                # else statement should never be reached, change to formal error-handling later on
+                print("Somehow we got to this part")
+        # print(f"Closest Node index: {closest_node_idx}")
+        # print(f"Distance from current to closest node: {closest_node_dist}")
         closest_node = pts_array[closest_node_idx]
 
         curr_dist += closest_node_dist
         curr_node = closest_node
-        # print(f'Closest node index (should not be 0, should be 16): {closest_node_idx}')
-        # print(f'Closest node distance (should not be 0, should be 13.2569): {closest_node_dist}')
-        # print(f'Closest Node info: Number = {closest_node.number}, ({closest_node.x}, {closest_node.y})')
-        # break
-        print(curr_dist)
-        
-        # delete the first column so that the while loop is not evaluated as false
-        # if (dist_matrix_interm[0][0] == 0.0):
-        #     dist_matrix_interm = np.delete(dist_matrix_interm, 0, 0)
-        #     dist_matrix_interm = np.delete(dist_matrix_interm, 0, 1)
+        #print(f"Running total distance: {curr_dist}")
     # now visit last node (return to landing pad)
-    neighbor_nodes = dist_matrix[curr_node.number - 1]
+    last_curr_node_idx = curr_node.number - 1
+    idx_visited.add(last_curr_node_idx)
+    idx_not_visited.remove(last_curr_node_idx)
+    path.append(curr_node.number)
+
+    neighbor_nodes = dist_matrix[last_curr_node_idx]
     return_dist = neighbor_nodes[num_interm_nodes]
     return_node = pts_array[num_interm_nodes]
     curr_dist += return_dist
-    visited.add(return_node.number)
-    path.append(return_node.number)
+    return_node_idx = return_node.number - 1
+    idx_visited.add(return_node_idx)
+    path.append(1)
 
-    return path, curr_dist, visited
+    # idx_visted should have all the indices and idx_not_visited should be an empty set at this point
+    return path, curr_dist, idx_visited, idx_not_visited
