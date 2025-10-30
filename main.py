@@ -3,11 +3,12 @@
 #inputs: file with N locations, Enter key interpution(char or askii value)
 #Outputs: Sum of distance(int), paths of points(array), if solution is greater than 6000...(string), any error messaging(string)
 import math
+import numpy as np
 import DistanceMatrix
 from euclideanDistance import Euclidean
 from route import saveRouteImg
 import randomNN
-import ClassicNN
+from ClassicNN import ClassicNN
 import ModifiedNN
 import EarlyAbandoning
 from randomS import randomSearch
@@ -74,7 +75,7 @@ listOfPoints[-1].number = 1;
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
 
-threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
+# threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
 input()
 isDone = True
@@ -106,4 +107,13 @@ dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
 #print(dist_mat)
 
 # pass dist matrix as a parameter to the RandomNN function?
-#solution = randomNN(dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
+# solution = randomNN(array, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
+
+print("     ClassicNN Stuff:")
+path, curr_dist, visited, not_visited = ClassicNN(listOfPoints, dist_mat, calculate_dist=Euclidean)
+print(f"Path: {path}")
+print(f"Distance: {curr_dist}")
+print(f"Indices Visted Nodes: {visited}")
+print(f"Indices Not Visited: {not_visited}")
+
+print("     ModifiedNN Stuff:")
