@@ -50,7 +50,6 @@ prev = 0
 def printSum(sumOfDistance, listOfPoints):
     global collectionOfDistance, finalPath, prev #so variables are mutable within thread and function
     start_time = time.time()
-    i = 1
     while not isDone:
         time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
