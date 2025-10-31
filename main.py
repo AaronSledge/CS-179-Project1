@@ -87,7 +87,7 @@ with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}", "w")
     for i in finalPath:
         outFile.write(f"{i.number} \n")
 
-#writeToDistanceFile(collectionOfDistance)
+writeToDistanceFile(collectionOfDistance)
 
 nameFileOne = "distanceFileRandomS.txt"
 
