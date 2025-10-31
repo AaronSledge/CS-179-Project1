@@ -2,7 +2,7 @@ from euclideanDistance import Euclidean
 import numpy as np
 import random
 
-def ModifiedNN(pts_array, dist_matrix, path_to_beat, dist_to_beat):
+def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
     num_interm_nodes = len(pts_array) - 1 # for the 128Circle201.txt file, this should be 127, so now the last node(the launching pad is no longer included in the array)
     
     # isolate the intermediate nodes so that we don't visit the launching pad again before visiting all other nodes first
@@ -29,7 +29,7 @@ def ModifiedNN(pts_array, dist_matrix, path_to_beat, dist_to_beat):
         curr_node_idx = curr_node.number - 1
         idx_visited.add(curr_node_idx)
         idx_not_visited.remove(curr_node_idx)
-        path.append(curr_node.number)
+        path.append(curr_node)
         
         closest_node_idx = -1
         closest_node_dist = 7000
@@ -98,7 +98,7 @@ def ModifiedNN(pts_array, dist_matrix, path_to_beat, dist_to_beat):
     # print(f"Not visited set after main part of algorithm:")
     # print(idx_not_visited)
     idx_not_visited.remove(last_curr_node_idx)
-    path.append(curr_node.number)
+    path.append(curr_node)
 
     neighbor_nodes = dist_matrix[last_curr_node_idx]
     return_dist = neighbor_nodes[num_interm_nodes]
@@ -106,10 +106,10 @@ def ModifiedNN(pts_array, dist_matrix, path_to_beat, dist_to_beat):
     curr_dist += return_dist
     return_node_idx = return_node.number - 1
     idx_visited.add(return_node_idx)
-    path.append(1)
+    path.append(return_node)
 
     sorted_idx_visited = sorted(idx_visited)
     sorted_idx_not_visited = sorted(idx_not_visited)
 
     # idx_visted should have all the indices and idx_not_visited should be an empty set at this point
-    return path, curr_dist, sorted_idx_visited, sorted_idx_not_visited
+    return curr_dist, path, sorted_idx_visited, sorted_idx_not_visited
