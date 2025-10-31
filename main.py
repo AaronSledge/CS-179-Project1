@@ -5,9 +5,11 @@
 import math
 import DistanceMatrix
 from euclideanDistance import Euclidean
+from route import saveRouteImg
+from distancePlot import analyzeDistance
 import randomNN
-import ClassicNN
-import ModifiedNN
+from ClassicNN import ClassicNN
+from ModifiedNN import ModifiedNN
 import EarlyAbandoning
 from randomS import randomSearch
 import threading
@@ -75,7 +77,6 @@ finalPath = []
 def printSum(sumOfDistance, listOfPoints):
     global collectionOfDistance, finalPath #so variables are mutable within thread and function
     start_time = time.time()
-    i = 1
     while not isDone:
         time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
@@ -96,6 +97,7 @@ listOfPoints = FileRead(filename)
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
 
+#source threading https://www.youtube.com/watch?v=A_Z1lgZLSNc
 threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
 input()
@@ -105,9 +107,11 @@ with open(f"{filename}_SOLUTION_{collectionOfDistance[-1][0]}", "w") as outFile:
     for i in finalPath:
         outFile.write(f"{i.number} \n")
 
-#print(collectionOfDistance) uncomment this to see array of distance and time(in seconds)assoicated with
+#writeToDistanceFile(collectionOfDistance)
 
+nameFileOne = "distanceFileRandomS.txt"
 
+analyzeDistance(nameFileOne)
 
 
 
@@ -127,4 +131,21 @@ with open(f"{filename}_SOLUTION_{collectionOfDistance[-1][0]}", "w") as outFile:
 #print(dist_mat)
 
 # pass dist matrix as a parameter to the RandomNN function?
-#solution = randomNN(dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN, calculate_dist=Euclidean, optimizer=EarlyAbandoning)
+# solution_path, solution_dist = RandomNN(listOfPoints, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN)
+
+print("     ClassicNN Stuff:")
+path, curr_dist, visited, not_visited = ClassicNN(listOfPoints, dist_mat)
+print(f"Current Distance (bsf): {curr_dist}")
+print("     DONE")
+# print(f"Path: {path}")
+# print(f"Distance: {curr_dist}")
+# print(f"Indices Visted Nodes: {visited}")
+# print(f"Indices Not Visited: {not_visited}")
+
+print("     ModifiedNN Stuff:")
+path, curr_dist, visited, not_visited = ModifiedNN(listOfPoints, dist_mat, path, curr_dist)
+
+print(f"Path: {path}")
+print(f"Distance: {curr_dist}")
+print(f"Indices Visted Nodes: {visited}")
+print(f"Indices Not Visited: {not_visited}")

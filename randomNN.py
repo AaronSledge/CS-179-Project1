@@ -8,13 +8,34 @@ import ModifiedNN
 import EarlyAbandoning
 from euclideanDistance import Euclidean
 
-def randomNN(pts_array, dist_matrix, starting_alg, second_alg, calculate_dist, optimizer=0):
+def RandomNN(pts_array, dist_matrix, starting_alg, second_alg, optimizer=0):
     # somehow check that locations was created correctly, locations is an array that assigns a number to each
     # location and sets the x and y coordinates as attributes of the object
     # assuming this was done correctly do the following:
 
     # ClassicNN performs the first iteration to create the BSF solution as a baseline, i.e. the strawman.
     # this is the normal NearestNeighbors alg.
-    bsf = starting_alg(pts_array, dist_matrix, calculate_dist)
+    bsf_path, bsf_dist, _, _ = starting_alg(pts_array, dist_matrix)
+
+    # need to do threading here. Want second_alg to keep running until user hits the ENTER key
+    isDone = False
+    collectionOfDistance = []
+    finalPath = []
+
+    def printSum(sumOfDistance, listOfPoints):
+        global collectionOfDistance, finalPath #so variables are mutable within thread and function
+        start_time = time.time()
+        while not isDone:
+            time.sleep(0.5) #code pauses half a second. Can change if needed to
+            sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
+            time_So_Far = time.time() - start_time 
+            collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
+            finalPath = path
+            print(f"\t \t {sumOfDistance}")
+    bsf_path2, bsf_dist2, _, _ = second_alg(pts_array, dist_matrix, bsf_path, bsf_dist)
+    if (bsf_dist2 < bsf_dist):
+        bsf_dist = bsf_dist2
+        bsf_path = bsf_path2
+
     
-    return 2
+    return bsf_path, bsf_dist

@@ -1,6 +1,5 @@
 from euclideanDistance import Euclidean
 import numpy as np
-import heapq as hq
 
 class Location:
     def __init__(self, number, x, y):
@@ -8,7 +7,7 @@ class Location:
         self.x = x
         self.y = y
 
-def ClassicNN(pts_array, dist_matrix, calculate_dist = Euclidean):
+def ClassicNN(pts_array, dist_matrix):
     # source from YouTube: https://www.youtube.com/watch?v=RQpFffcI-ZI
     # need the pts_array to know what points pertain to what node number, need the calculate_dist
     # variable so we can change the distance function if we ever want to
@@ -83,5 +82,8 @@ def ClassicNN(pts_array, dist_matrix, calculate_dist = Euclidean):
     idx_visited.add(return_node_idx)
     path.append(1)
 
+    sorted_idx_visited = sorted(idx_visited)
+    sorted_idx_not_visited = sorted(idx_not_visited)
+
     # idx_visted should have all the indices and idx_not_visited should be an empty set at this point
-    return path, curr_dist, idx_visited, idx_not_visited
+    return path, curr_dist, sorted_idx_visited, sorted_idx_not_visited
