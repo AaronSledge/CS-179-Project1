@@ -43,7 +43,7 @@ def ClassicNN(pts_array, dist_matrix):
         curr_node_idx = curr_node.number - 1
         idx_visited.add(curr_node_idx)
         idx_not_visited.remove(curr_node_idx)
-        path.append(curr_node.number)
+        path.append(curr_node)
         
         closest_node_idx = -1
         closest_node_dist = 7000
@@ -72,7 +72,7 @@ def ClassicNN(pts_array, dist_matrix):
     last_curr_node_idx = curr_node.number - 1
     idx_visited.add(last_curr_node_idx)
     idx_not_visited.remove(last_curr_node_idx)
-    path.append(curr_node.number)
+    path.append(curr_node)
 
     neighbor_nodes = dist_matrix[last_curr_node_idx]
     return_dist = neighbor_nodes[num_interm_nodes]
@@ -80,10 +80,10 @@ def ClassicNN(pts_array, dist_matrix):
     curr_dist += return_dist
     return_node_idx = return_node.number - 1
     idx_visited.add(return_node_idx)
-    path.append(1)
+    path.append(return_node)
 
     sorted_idx_visited = sorted(idx_visited)
     sorted_idx_not_visited = sorted(idx_not_visited)
 
     # idx_visted should have all the indices and idx_not_visited should be an empty set at this point
-    return path, curr_dist, sorted_idx_visited, sorted_idx_not_visited
+    return curr_dist, path, sorted_idx_visited, sorted_idx_not_visited
