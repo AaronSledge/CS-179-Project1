@@ -18,4 +18,7 @@ def randomSearch(listOfPoints, sumOfDistance):
     if(distance < sumOfDistance):
         return (distance, path)
     
+    if (sumOfDistance > 6000):
+        print(f"Warning: Solution is {sumOfDistance}, greater than the 6000-meter constraint.")
+    
     return (sumOfDistance, path)
