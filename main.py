@@ -17,24 +17,47 @@ import threading
 import time
 import os
 
+# Object called location to store the coordinates of a location read in from the file
 class Location:
     def __init__(self, number, x, y):
         self.number = number
         self.x = x
         self.y = y
 
+# This function reads in the input file which has coordinates for each location
 def FileRead(filename):
+    # Opens the file
     file = open(filename)
-
+    # Create a list to store the location objects in
     listOfPoints = []
+    # Keeps track of what location we are at 
     number = 0
 
+    # This while loop runs while the file is not empty 
     while True:
+        # This reads in a line from the file, it ends when it sees a newline
         line = file.readline()
-        if(line == ""):
+        # If the first line in the file is an empty string then it is either empty or in the wrong format 
+        if((line == "") & (number == 0)):
+            print("File is empty or in wrong format")
+            # Abort the program
+            exit()
+        # If any line after the first line is an empty string then we have reached the file 
+        elif (line == ""):
             break
         else:
-            x, y = line.split()
+            splitLine = line.split()
+            if ((len(splitLine) > 2) | (len(splitLine) < 2)):
+                print("File in wrong format")
+                exit()
+            x, y = splitLine
+            if ((x[-4:] != "e+01") & (y[-4:] != "e+01")):
+                print("File in wrong format")
+                exit()
+            if ((len(x) > 13) | (len(x) < 13 | (x[2] != ".")) & ((len(y) > 13) | (len(y) < 13) | (y[2] != "."))):
+                print("File in wrong format")
+                exit()
+            
             x = float(x)
             y = float(y)
             number = number + 1
@@ -42,6 +65,11 @@ def FileRead(filename):
             listOfPoints.append(node)
         
     file.close()
+
+    if (len(listOfPoints) > 256):
+        print("N is greater than 256")
+        exit()
+        
     return listOfPoints
 
 isDone = False
@@ -70,7 +98,7 @@ def writeToDistanceFile(collectionOfDistance):
 
 filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
-listOfPoints[-1].number = 1;
+listOfPoints[-1].number = 1
 
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
