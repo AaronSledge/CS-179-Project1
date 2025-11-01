@@ -36,39 +36,47 @@ def FileRead(filename):
     while True:
         # This reads in a line from the file, it ends when it sees a newline
         line = file.readline()
-        # If the first line in the file is an empty string then it is either empty or in the wrong format 
-        if((line == "") & (number == 0)):
-            print("File is empty or in wrong format")
-            # Abort the program
-            exit()
-        # If any line after the first line is an empty string then we have reached the file 
-        elif (line == ""):
-            break
-        else:
+        # If the line read is not an empty string we can proceed and try to create object called location
+        if (line != ""):
+            # Splits the line so we can get the x and y coordinates separately
             splitLine = line.split()
-            if ((len(splitLine) > 2) | (len(splitLine) < 2)):
+            # Checks if the split line has only one x and one y coordinate
+            if (len(splitLine) == 2):
+                # We try to type convert the input, if it can not be converted then it is invalid
+                try:
+                    # We create the object called node which is a location object
+                    x = float(splitLine[0])
+                    y = float(splitLine[1])
+                    number = number + 1
+                    node = Location(number, x, y)
+                    # Add the node into our list of points which stores our object location
+                    listOfPoints.append(node)
+                except:
+                    # If the exception triggers the file is in the wrong format
+                    print("File in wrong format")
+                    exit()
+            # If the splitline has more than just one x and one y then the file is in the incorrect format
+            else:
                 print("File in wrong format")
                 exit()
-            x, y = splitLine
-            if ((x[-4:] != "e+01") & (y[-4:] != "e+01")):
-                print("File in wrong format")
-                exit()
-            if ((len(x) > 13) | (len(x) < 13 | (x[2] != ".")) & ((len(y) > 13) | (len(y) < 13) | (y[2] != "."))):
-                print("File in wrong format")
-                exit()
-            
-            x = float(x)
-            y = float(y)
-            number = number + 1
-            node = Location(number, x, y)
-            listOfPoints.append(node)
-        
+        # Here we break the loop if we reach an empty string
+        else: 
+            break
+
+    # Once we are done with the file we need to close it    
     file.close()
 
+    # If list of points remains empty, then we know the input file is empty
+    if (listOfPoints == []):
+        print("File is empty")
+        exit()
+
+    # The drone is allowed a maximum of 256 points that it can reach
     if (len(listOfPoints) > 256):
         print("N is greater than 256")
         exit()
-        
+    
+    # This function returns the list of points array which contains object location
     return listOfPoints
 
 isDone = False
