@@ -8,7 +8,6 @@ import DistanceMatrix
 from euclideanDistance import Euclidean
 from route import saveRouteImg
 from distancePlot import analyzeDistance
-import randomNN
 from ClassicNN import ClassicNN
 from ModifiedNN import ModifiedNN
 import EarlyAbandoning
@@ -173,12 +172,11 @@ prev = 0
 def printSumNN(sumOfDistance, listOfPoints):
     global collectionOfDistanceNN, finalPathNN, prev, first_iter #so variables are mutable within thread and function
     start_time = time.time()
-    i = 1
     if first_iter == True:
         time.sleep(0.25)
         sumOfDistance, path, _, _ = ClassicNN(listOfPoints, dist_mat)
         if prev != sumOfDistance:
-            time_So_Far = time.time() - start_time 
+            time_So_Far = time.time() - start_time
             collectionOfDistanceNN.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
             finalPathNN = path #for jason when making route graph
             print(f"\t \t {sumOfDistance}")
