@@ -3,6 +3,9 @@ import numpy as np
 import random
 
 def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
+    # change last point in pts_array to have a number of 128 rather than 1, need this for later stuff so we
+    # don't get an index error
+
     num_interm_nodes = len(pts_array) - 1 # for the 128Circle201.txt file, this should be 127, so now the last node(the launching pad is no longer included in the array)
     
     # isolate the intermediate nodes so that we don't visit the launching pad again before visiting all other nodes first
@@ -88,6 +91,8 @@ def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
                 closest_node = pts_array[closest_node_idx]
                 curr_dist += closest_node_dist
         curr_node = closest_node
+        if (len(idx_visited) == num_interm_nodes-1): # prints current nodes index on the last iteration of this while loop
+            print(f"Last curr_node index: {curr_node.number - 1}")
         # print(f"Closest Node distance: {closest_node_dist}")
         # print(f"Closest Node index: {closest_node_idx}")
         # print(f"2nd Closest Node distance: {closest_node_dist2}")
@@ -97,6 +102,7 @@ def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
     idx_visited.add(last_curr_node_idx)
     # print(f"Not visited set after main part of algorithm:")
     # print(idx_not_visited)
+    print(f"Last current node index: {last_curr_node_idx}")
     idx_not_visited.remove(last_curr_node_idx)
     path.append(curr_node)
 
