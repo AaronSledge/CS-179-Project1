@@ -205,6 +205,9 @@ def printSumNN(sumOfDistance, listOfPoints):
 def writeToDistanceFileNN(collectionOfDistanceNN):
     with open("distanceFileRandomNN.txt", "a") as file:
         file.write(str(collectionOfDistanceNN) + "\n")
+print("--List of Points--")
+for i in range(0, len(listOfPoints)):
+    print(listOfPoints[i].number)
 
 print("--Solution from RandomNN Algorithm--")
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
