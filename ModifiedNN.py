@@ -2,10 +2,7 @@ from euclideanDistance import Euclidean
 import numpy as np
 import random
 
-def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
-    # change last point in pts_array to have a number of 128 rather than 1, need this for later stuff so we
-    # don't get an index error
-
+def ModifiedNN(pts_array, dist_matrix, path_to_beat, dist_to_beat):
     num_interm_nodes = len(pts_array) - 1 # for the 128Circle201.txt file, this should be 127, so now the last node(the launching pad is no longer included in the array)
     
     # isolate the intermediate nodes so that we don't visit the launching pad again before visiting all other nodes first
@@ -27,7 +24,7 @@ def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
     # at this point curr_node is node 1 with coordinates = (82.0, 50.0)
     curr_node = pts_array[0]
 
-    while (len(idx_visited) != num_interm_nodes-1) and ((curr_node.number - 1) not in idx_visited) and (bool(idx_not_visited) == True):
+    while (len(idx_visited) != num_interm_nodes - 1) and ((curr_node.number - 1) not in idx_visited) and (bool(idx_not_visited) == True):
         # add current node to visited set and path, and remove the current node index from the not visited set (essentially swap the indices)
         curr_node_idx = curr_node.number - 1
         idx_visited.add(curr_node_idx)
@@ -102,8 +99,12 @@ def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
     idx_visited.add(last_curr_node_idx)
     # print(f"Not visited set after main part of algorithm:")
     # print(idx_not_visited)
-    print(f"Last current node index: {last_curr_node_idx}")
-    idx_not_visited.remove(last_curr_node_idx)
+
+    # Need to check if the last curr node index is in the index not visited set before we remove it so that indexing
+    # is not messed up by trying to remove something that does not exist in the set
+    if (last_curr_node_idx in idx_not_visited):
+        idx_not_visited.remove(last_curr_node_idx)
+        
     path.append(curr_node)
 
     neighbor_nodes = dist_matrix[last_curr_node_idx]
@@ -118,4 +119,11 @@ def ModifiedNN(pts_array, dist_matrix, dist_to_beat):
     sorted_idx_not_visited = sorted(idx_not_visited)
 
     # idx_visted should have all the indices and idx_not_visited should be an empty set at this point
-    return curr_dist, path, sorted_idx_visited, sorted_idx_not_visited
+
+    # if dist to beat is greater than current distance then we should return current distance
+    if (dist_to_beat > curr_dist):
+        return int(curr_dist), path, sorted_idx_visited, sorted_idx_not_visited 
+    # if it is not we should return the old path and distance and try again 
+    else: 
+        return int(dist_to_beat), path_to_beat, sorted_idx_visited, sorted_idx_not_visited 
+    

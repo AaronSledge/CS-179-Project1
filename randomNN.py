@@ -37,5 +37,7 @@ def RandomNN(pts_array, dist_matrix, starting_alg, second_alg, optimizer=0):
         bsf_dist = bsf_dist2
         bsf_path = bsf_path2
 
-    
+    if (bsf_dist > 6000):
+        print(f"Warning: Solution is {bsf_dist}, greater than the 6000-meter constraint.")
+
     return bsf_path, bsf_dist

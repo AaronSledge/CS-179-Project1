@@ -6,7 +6,7 @@ import random
 from euclideanDistance import Euclidean
 
 def randomSearch(listOfPoints, sumOfDistance):
-    middle = listOfPoints[1:len(listOfPoints) - 1] #split the array, randomize, then combine at end
+    middle = listOfPoints[1:len(listOfPoints)-1] #split the array, randomize, then combine at end
     randomList = random.sample(middle, len(middle))
 
     path = [listOfPoints[0]] + randomList + [listOfPoints[-1]]
