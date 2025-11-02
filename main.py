@@ -116,6 +116,9 @@ threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used t
 input()
 isDone = True
 
+if (collectionOfDistance[-1][0] > 6000):
+    print(f"Warning: Solution is {collectionOfDistance[-1][0]}, greater than the 6000-meter constraint.")
+
 filename = os.path.splitext(os.path.basename(filename))[0]
 # this writes the solution for which nodes to visit e.g. "1 2 10 3 1"
 with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}", "w") as outFile:
@@ -194,13 +197,14 @@ def printSumNN(sumOfDistance, listOfPoints):
         time.sleep(0.25) #code pauses half a second. Can change if needed to
         sumOfDistance, path, _, _ = ModifiedNN(listOfPoints, dist_mat, dist_to_beat=sumOfDistance)
         if prev != sumOfDistance:
-            time_So_Far = time.time() - start_time 
+            time_So_Far = time.time() - start_time
             collectionOfDistanceNN.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
             finalPathNN = path #for jason when making route graph
             print(f"\t \t {sumOfDistance}")
         prev = sumOfDistance  
-        
+       
     saveRouteImg(listOfPoints, finalPathNN, prev, filename)
+
 
 def writeToDistanceFileNN(collectionOfDistanceNN):
     with open("distanceFileRandomNN.txt", "a") as file:
@@ -209,19 +213,24 @@ print("--List of Points--")
 for i in range(0, len(listOfPoints)):
     print(listOfPoints[i].number)
 
+
 print("--Solution from RandomNN Algorithm--")
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
 
+
 threading.Thread(target=printSumNN, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
+
 
 input()
 isDone = True
+
 
 filename = os.path.splitext(os.path.basename(filename))[0]
 # this writes the solution for which nodes to visit e.g. "1 2 10 3 1"
 with open(f"{filename}_SOLUTION_{int(round(collectionOfDistanceNN[-1][0]))}", "w") as outFile:
     for i in finalPathNN:
         outFile.write(f"{i} \n")
+
 
 writeToDistanceFileNN(collectionOfDistanceNN)
