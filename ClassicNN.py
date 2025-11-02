@@ -86,4 +86,4 @@ def ClassicNN(pts_array, dist_matrix):
     sorted_idx_not_visited = sorted(idx_not_visited)
 
     # idx_visted should have all the indices and idx_not_visited should be an empty set at this point
-    return curr_dist, path, sorted_idx_visited, sorted_idx_not_visited
+    return int(curr_dist), path, sorted_idx_visited, sorted_idx_not_visited

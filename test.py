@@ -6,6 +6,8 @@ import math
 from euclideanDistance import Euclidean
 from randomS import randomSearch
 from main import Location
+from main import FileRead
+from main import finalPathToFile
 
 class TestEuclidean(unittest.TestCase):
     def test_euclideanCalc(self):
@@ -76,6 +78,20 @@ class TestRandomS(unittest.TestCase):
         distance2 = sumOfdistance
         self.assertLess(distance2, distance1, "Random search does not output quicker path")
 
+class TestFileRead(unittest.TestCase):
+    def test_CorrectRead(self):
+        testFile = "filereadtest.txt"
+        listOfPoints = FileRead(testFile)
+        one = Location(1, 1.0, 2.0)
+        two = Location(2, 3.0, 4.0)
+        three = Location(3, 5.0, 6.0)
+        four = Location(4, 7.0, 8.0)
+        array = [one, two, three, four]
+        equal = False
+        for i in range(len(array)):
+            if ((listOfPoints[i].number == array[i].number) & (listOfPoints[i].x == array[i].x) & (listOfPoints[i].y == array[i].y)):
+                equal = True
+        self.assertEqual(equal, True, "The file is read correctly")
 
 if __name__ == "__main__":
     unittest.main()
