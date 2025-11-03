@@ -107,18 +107,18 @@ filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
 listOfPoints[-1].number = 1
 
-print(f"There are {(len(listOfPoints))} nodes, computing route...")
-print("\t Shortest Route Discovered So Far")
+#print(f"There are {(len(listOfPoints))} nodes, computing route...")
+#print("\t Shortest Route Discovered So Far")
 
 #source threading https://www.youtube.com/watch?v=A_Z1lgZLSNc
-threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
+#threading.Thread(target=printSum, args=(math.inf, listOfPoints)).start() #used threading so function can continously run without having to wait for input
 
-input()
-isDone = True
+#input()
+#isDone = True
 
-if (collectionOfDistance[-1][0] > 6000):
-    print(f"Warning: Solution is {collectionOfDistance[-1][0]}, greater than the 6000-meter constraint.")
-    filename = os.path.splitext(os.path.basename(filename))[0]
+#if (collectionOfDistance[-1][0] > 6000):
+    #print(f"Warning: Solution is {collectionOfDistance[-1][0]}, greater than the 6000-meter constraint.")
+    #filename = os.path.splitext(os.path.basename(filename))[0]
 
 # this writes the solution for which nodes to visit e.g. "1 2 10 3 1"
 def finalPathToFile(filename, finalPath, collectionOfDistance):
@@ -127,13 +127,13 @@ def finalPathToFile(filename, finalPath, collectionOfDistance):
             outFile.write(f"{i.number} \n")
     return outFile.name
 
-outFile = finalPathToFile(filename, finalPath, collectionOfDistance)
+#outFile = finalPathToFile(filename, finalPath, collectionOfDistance)
 
-writeToDistanceFile(collectionOfDistance)
+#writeToDistanceFile(collectionOfDistance)
 
-nameFileOne = "distanceFileRandomS.txt"
+#nameFileOne = "distanceFileRandomS.txt"
 
-analyzeDistance(nameFileOne)
+#analyzeDistance(nameFileOne)
 
 
 
