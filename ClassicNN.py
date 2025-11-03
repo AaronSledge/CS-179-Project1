@@ -71,7 +71,10 @@ def ClassicNN(pts_array, dist_matrix):
     # now visit last node (return to landing pad)
     last_curr_node_idx = curr_node.number - 1
     idx_visited.add(last_curr_node_idx)
-    idx_not_visited.remove(last_curr_node_idx)
+
+    if (last_curr_node_idx in idx_not_visited):
+        idx_not_visited.remove(last_curr_node_idx)
+        
     path.append(curr_node)
 
     neighbor_nodes = dist_matrix[last_curr_node_idx]
