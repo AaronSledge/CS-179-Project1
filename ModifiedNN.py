@@ -88,6 +88,8 @@ def ModifiedNN(pts_array, dist_matrix, path_to_beat, dist_to_beat):
                 closest_node = pts_array[closest_node_idx]
                 curr_dist += closest_node_dist
         curr_node = closest_node
+        #if (len(idx_visited) == num_interm_nodes-1): # prints current nodes index on the last iteration of this while loop
+            #print(f"Last curr_node index: {curr_node.number - 1}")
         # print(f"Closest Node distance: {closest_node_dist}")
         # print(f"Closest Node index: {closest_node_idx}")
         # print(f"2nd Closest Node distance: {closest_node_dist2}")
