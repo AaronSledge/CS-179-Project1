@@ -81,7 +81,7 @@ class TestRandomS(unittest.TestCase):
         distance2 = sumOfdistance
         self.assertLess(distance2, distance1, "Random search does not output quicker path")
 
-
+# This tests if a file is read in correctly
 class TestFileRead(unittest.TestCase):
     def test_CorrectRead(self):
         testFile = "filereadtest.txt"
@@ -97,7 +97,7 @@ class TestFileRead(unittest.TestCase):
                 count += 1
         self.assertEqual(4, 4, "The file is not read correctly")
 
-
+# This tests if an output file was made correctly 
 class TestOutputFile(unittest.TestCase):
     def test_MakeOutputFile(self):
         filename = "file"
@@ -118,7 +118,7 @@ class TestOutputFile(unittest.TestCase):
             created = True
         self.assertEqual(created, True, "The output file is not made correctly")
     
-
+# This tests to see if the distance matrix makes the correct output
 class TestDistanceMatrix(unittest.TestCase):
     def test_DistanceMatrix(self):
         one = Location(1, 1.0, 2.0)
@@ -141,6 +141,7 @@ class TestDistanceMatrix(unittest.TestCase):
                     count += 1
         self.assertEqual(count, 16, "The distance matrix is not made correctly")
 
+# This tests the classic nn functions, creating a path, ensures start and stop position are the same
 class TestClassicNN(unittest.TestCase):
     def test_ClassicNN(self):
         one = Location(1, 1.0, 10.0)
@@ -181,6 +182,7 @@ class TestClassicNN(unittest.TestCase):
         if (sumOfDistance >= 0):
             self.assertEqual(newPath[-1].number, 1, "Stop position is changed")
 
+# This tests the modified nn functions, creating a path, ensures start and stop position are the same
 class TestModifiedNN(unittest.TestCase):
     def test_ModifiedNN(self):
         one = Location(1, 1.0, 10.0)
