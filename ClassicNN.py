@@ -9,20 +9,12 @@ class Location:
 
 def ClassicNN(pts_array, dist_matrix):
     # source from YouTube: https://www.youtube.com/watch?v=RQpFffcI-ZI
-    # need the pts_array to know what points pertain to what node number, need the calculate_dist
-    # variable so we can change the distance function if we ever want to
-
-    # so how do we do this? Start at Node 1 (launch pad and mark it as visited so that we don't visit it
-    # again before visiting all other nodes)
+    # need the pts_array to know what points pertain to what node number
     num_interm_nodes = len(pts_array) - 1 # for the 128Circle201.txt file, this should be 127, so now the last node(the launching pad is no longer included in the array)
     
     # isolate the intermediate nodes so that we don't visit the launching pad again before visiting all other nodes first
     dist_matrix_interm = np.delete(dist_matrix, num_interm_nodes, 1)
     dist_matrix_interm = np.delete(dist_matrix_interm, num_interm_nodes, 0)
-
-    # dimensions should be 127 x 127 now since we removed the last column and row
-    # print(f'Number of Rows: {len(dist_matrix_interm)}')
-    # print(f'Number of Columns: {len(dist_matrix_interm[0])}')
 
     #sumOfDistance = 7000
     curr_dist = 0
@@ -35,7 +27,6 @@ def ClassicNN(pts_array, dist_matrix):
     for i in range(0, num_interm_nodes):
         idx_not_visited.add(i)
     
-    # at this point curr_node is node 1 with coordinates = (82.0, 50.0)
     curr_node = pts_array[0]
 
     while (len(idx_visited) != num_interm_nodes-1) and ((curr_node.number - 1) not in idx_visited) and (bool(idx_not_visited) == True):
@@ -61,13 +52,11 @@ def ClassicNN(pts_array, dist_matrix):
             else:
                 # else statement should never be reached, change to formal error-handling later on
                 print("Somehow we got to this part")
-        # print(f"Closest Node index: {closest_node_idx}")
-        # print(f"Distance from current to closest node: {closest_node_dist}")
         closest_node = pts_array[closest_node_idx]
 
         curr_dist += closest_node_dist
         curr_node = closest_node
-        #print(f"Running total distance: {curr_dist}")
+
     # now visit last node (return to landing pad)
     last_curr_node_idx = curr_node.number - 1
     idx_visited.add(last_curr_node_idx)
@@ -77,14 +66,30 @@ def ClassicNN(pts_array, dist_matrix):
         
     path.append(curr_node)
 
+    # accesses all neighbor nodes for the last node we have visited
     neighbor_nodes = dist_matrix[last_curr_node_idx]
+
+    # we will return the start location by access the last index of this array of neighbor nodes
+    # the last node and first node are both the same location; which is the launch pad
+
+    # this gets the actual distance to return from the last visited node to the launch pad
     return_dist = neighbor_nodes[num_interm_nodes]
+
+    # this gets the actual node (the launch pad)
     return_node = pts_array[num_interm_nodes]
+
+    # this adds the return distance to the total distance for the current path
     curr_dist += return_dist
+
+    # adds the last nodes index to the visited set
     return_node_idx = return_node.number - 1
     idx_visited.add(return_node_idx)
+
+    # appends the last node to the path so that we have a path in the form: 1 5 4 1
     path.append(return_node)
 
+    # sorts the two visited sets which helped during the development process to make sure that
+    # all nodes were visited and no nodes were left unvisited
     sorted_idx_visited = sorted(idx_visited)
     sorted_idx_not_visited = sorted(idx_not_visited)
 

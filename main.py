@@ -131,6 +131,7 @@ listOfPoints = FileRead(filename)
 # Changing the last nodes number to match the start node since the start and stop position are the same
 listOfPoints[-1].number = 1
 
+# This section is for RandomS and was used in our report for comparison purposes:
 #print(f"There are {(len(listOfPoints))} nodes, computing route...")
 #print("\t Shortest Route Discovered So Far")
 
@@ -160,13 +161,6 @@ listOfPoints[-1].number = 1
 
 
 length = len(listOfPoints)
-# for i in range(length):
-#     if i == 0:
-#         print(f'Length of array: {length}')
-#     node = array[i]
-#     print(f'Node {node.number}, ({node.x}, {node.y})')
-
-
 
 # calculate distance matrix here, but how do we do make this matrix?
 dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
