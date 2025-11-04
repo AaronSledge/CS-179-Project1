@@ -107,6 +107,7 @@ filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
 listOfPoints[-1].number = 1
 
+# This section is for RandomS and was used in our report for comparison purposes:
 #print(f"There are {(len(listOfPoints))} nodes, computing route...")
 #print("\t Shortest Route Discovered So Far")
 
@@ -136,47 +137,10 @@ def finalPathToFile(filename, finalPath, collectionOfDistance):
 #analyzeDistance(nameFileOne)
 
 
-
-
-
 length = len(listOfPoints)
-# for i in range(length):
-#     if i == 0:
-#         print(f'Length of array: {length}')
-#     node = array[i]
-#     print(f'Node {node.number}, ({node.x}, {node.y})')
-
-
 
 # calculate distance matrix here, but how do we do make this matrix?
 dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
-#print(dist_mat)
-
-
-
-# pass dist matrix as a parameter to the RandomNN function?
-# solution_path, solution_dist = RandomNN(listOfPoints, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN)
-
-# print("     ClassicNN Stuff:")
-# path, curr_dist, visited, not_visited = ClassicNN(listOfPoints, dist_mat)
-# print(f"Current Distance (bsf): {curr_dist}")
-# print("     DONE")
-# # print(f"Path: {path}")
-# # print(f"Distance: {curr_dist}")
-# # print(f"Indices Visted Nodes: {visited}")
-# # print(f"Indices Not Visited: {not_visited}")
-
-# print("     ModifiedNN Stuff:")
-# path, curr_dist, visited, not_visited = ModifiedNN(listOfPoints, dist_mat, path, curr_dist)
-
-# print(f"Path: {path}")
-# print(f"Distance: {curr_dist}")
-# print(f"Indices Visted Nodes: {visited}")
-# print(f"Indices Not Visited: {not_visited}")
-
-
-
-
 
 # stuff for randomNN
 NNisDone = False
@@ -219,7 +183,6 @@ for i in range(0, len(listOfPoints)):
     print(listOfPoints[i].number)
 
 
-print("--Solution from RandomNN Algorithm--")
 print(f"There are {(len(listOfPoints))} nodes, computing route...")
 print("\t Shortest Route Discovered So Far")
 
