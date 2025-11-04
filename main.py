@@ -79,32 +79,56 @@ def FileRead(filename):
     # This function returns the list of points array which contains object location
     return listOfPoints
 
+# Random Search Functions
+
 isDone = False
 collectionOfDistance = []
 finalPath = []
 prev = 0
-def printSum(sumOfDistance, listOfPoints):
-    global collectionOfDistance, finalPath, prev #so variables are mutable within thread and function
-    start_time = time.time()
-    while not isDone:
-        time.sleep(0.25) #code pauses half a second. Can change if needed to
-        sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
-        if prev != sumOfDistance:
-            time_So_Far = time.time() - start_time 
-            collectionOfDistance.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
-            finalPath = path #for jason when making route graph
-            print(f"\t \t {sumOfDistance}")
-        prev = sumOfDistance  
-        
-    saveRouteImg(listOfPoints, finalPath, prev, filename)
-        
 
+# The print sum function prints the total distance of a path found using random search until the user hits the enter key
+def printSum(sumOfDistance, listOfPoints):
+    # We initialize gloabl variables so that the variables are mutable within thread and function
+    global collectionOfDistance, finalPath, prev 
+    # This gets the start time when it runs
+    start_time = time.time()
+
+    # This loop runs while the user does not hit enter
+    while not isDone:
+        # Code pauses a quarter of a second. Can change if needed to
+        time.sleep(0.25) 
+        sumOfDistance, path = randomSearch(listOfPoints, sumOfDistance)
+        # If the previous distance is not the same as the found distance from random search we found a new solution
+        if prev != sumOfDistance:
+            # We record the time it took to arrive at this solution 
+            time_So_Far = time.time() - start_time 
+            # For jason when making distance over time graph for report
+            collectionOfDistance.append((sumOfDistance, time_So_Far))
+            # For jason when making route graph and kenny when making output file
+            finalPath = path 
+            print(f"\t \t {sumOfDistance}")
+        # Set previous two the new distance found for the next iteration 
+        prev = sumOfDistance  
+
+    # Creates image using pill it has the locations noted as dots and connects them by lines    
+    saveRouteImg(listOfPoints, finalPath, prev, filename)
+
+# This writes the collection of distances to the file distance file random s so we can access the for plotting
 def writeToDistanceFile(collectionOfDistance):
     with open("distanceFileRandomS.txt", "a") as file:
         file.write(str(collectionOfDistance) + "\n")
 
+# This writes the solution for which nodes to visit e.g. "1 2 10 3 1"
+def finalPathToFile(filename, finalPath, collectionOfDistance):
+    with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}.txt", "w") as outFile:
+        for i in finalPath:
+            outFile.write(f"{i.number} \n")
+    return outFile.name
+
 filename = input("Enter the name of file: ")
 listOfPoints = FileRead(filename)
+
+# Changing the last nodes number to match the start node since the start and stop position are the same
 listOfPoints[-1].number = 1
 
 # This section is for RandomS and was used in our report for comparison purposes:
@@ -118,58 +142,96 @@ listOfPoints[-1].number = 1
 #isDone = True
 
 #if (collectionOfDistance[-1][0] > 6000):
-    #print(f"Warning: Solution is {collectionOfDistance[-1][0]}, greater than the 6000-meter constraint.")
+   #print(f"Warning: Solution is {collectionOfDistance[-1][0]}, greater than the 6000-meter constraint.")
     #filename = os.path.splitext(os.path.basename(filename))[0]
-
-# this writes the solution for which nodes to visit e.g. "1 2 10 3 1"
-def finalPathToFile(filename, finalPath, collectionOfDistance):
-    with open(f"{filename}_SOLUTION_{int(round(collectionOfDistance[-1][0]))}", "w") as outFile:
-        for i in finalPath:
-            outFile.write(f"{i.number} \n")
-    return outFile.name
 
 #outFile = finalPathToFile(filename, finalPath, collectionOfDistance)
 
 #writeToDistanceFile(collectionOfDistance)
+#writeToDistanceFile(collectionOfDistance)
 
+#nameFileOne = "distanceFileRandomS.txt"
 #nameFileOne = "distanceFileRandomS.txt"
 
 #analyzeDistance(nameFileOne)
+#analyzeDistance(nameFileOne)
+
+
+
 
 
 length = len(listOfPoints)
 
 # calculate distance matrix here, but how do we do make this matrix?
 dist_mat = DistanceMatrix.dist_matrix(listOfPoints)
+#print(dist_mat)
 
-# stuff for randomNN
+
+
+# pass dist matrix as a parameter to the RandomNN function?
+# solution_path, solution_dist = RandomNN(listOfPoints, dist_mat, starting_alg=ClassicNN, second_alg=ModifiedNN)
+
+# print("     ClassicNN Stuff:")
+# path, curr_dist, visited, not_visited = ClassicNN(listOfPoints, dist_mat)
+# print(f"Current Distance (bsf): {curr_dist}")
+# print("     DONE")
+# # print(f"Path: {path}")
+# # print(f"Distance: {curr_dist}")
+# # print(f"Indices Visted Nodes: {visited}")
+# # print(f"Indices Not Visited: {not_visited}")
+
+# print("     ModifiedNN Stuff:")
+# path, curr_dist, visited, not_visited = ModifiedNN(listOfPoints, dist_mat, path, curr_dist)
+
+# print(f"Path: {path}")
+# print(f"Distance: {curr_dist}")
+# print(f"Indices Visted Nodes: {visited}")
+# print(f"Indices Not Visited: {not_visited}")
+
+
+
+
+
+# Random NN Functions
+
 NNisDone = False
 collectionOfDistanceNN = []
 finalPathNN = []
 first_iter = True
 prev = 0
+
+# This function prints the total distance of a path calculated using classic nn in the first iteration 
+# It then uses a loop which calls our modified nn algorithm to try and find a shorter path
 def printSumNN(sumOfDistance, listOfPoints):
-    global collectionOfDistanceNN, finalPathNN, prev, first_iter #so variables are mutable within thread and function
+    global collectionOfDistanceNN, finalPathNN, prev, first_iter 
     start_time = time.time()
+    # If it is the first iteration classic nn should be performed
     if first_iter == True:
         time.sleep(0.25)
         sumOfDistance, path, _, _ = ClassicNN(listOfPoints, dist_mat)
+        # Just like random search if the new distance is not the same as the old distance we found a new route
         if prev != sumOfDistance:
+            # This gets the time it took to find a route
             time_So_Far = time.time() - start_time
-            collectionOfDistanceNN.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
-            finalPathNN = path #for jason when making route graph
-            print(f"\t \t {sumOfDistance}")
+            # For jason when making distance over time graph
+            collectionOfDistanceNN.append((sumOfDistance, time_So_Far)) 
+             # For jason when making route graph and kenny for file output
+            finalPathNN = path
+            print(f"          {sumOfDistance}")
         prev = sumOfDistance
+        # Make sure to indicate this after one run so classic nn only runs once
         first_iter = False
+    # While the user has not hit the entry key this loop will keep going 
     while not NNisDone:
-        time.sleep(0.25) #code pauses half a second. Can change if needed to
+        #code pauses a quarter of a second. Can change if needed to
+        time.sleep(0.25) 
         sumOfDistance, path, _, _ = ModifiedNN(listOfPoints, dist_mat, finalPathNN, dist_to_beat=sumOfDistance)
-
+        # This is utilized the same
         if prev != sumOfDistance:
             time_So_Far = time.time() - start_time
             collectionOfDistanceNN.append((sumOfDistance, time_So_Far)) #for jason when making distance over time graph
             finalPathNN = path #for jason when making route graph
-            print(f"\t \t {sumOfDistance}")
+            print(f"          {sumOfDistance}")
         prev = sumOfDistance  
        
     saveRouteImg(listOfPoints, finalPathNN, prev, filename)
@@ -178,17 +240,21 @@ def printSumNN(sumOfDistance, listOfPoints):
 def writeToDistanceFileNN(collectionOfDistanceNN):
     with open("distanceFileRandomNN.txt", "a") as file:
         file.write(str(collectionOfDistanceNN) + "\n")
-print("--List of Points--")
-for i in range(0, len(listOfPoints)):
-    print(listOfPoints[i].number)
+
+#print("--List of Points--")
+#for i in range(0, len(listOfPoints)):
+    #print(listOfPoints[i].number)
 
 
-print(f"There are {(len(listOfPoints))} nodes, computing route...")
-print("\t Shortest Route Discovered So Far")
+print(f"There are {(len(listOfPoints))} nodes, computing route..")
+print("     Shortest Route Discovered So Far")
 
-threading.Thread(target=printSumNN, args=(math.inf, listOfPoints)).start() # used threading so function can continously run without having to wait for input
+# Used threading so function can continously run without having to wait for input
+threading.Thread(target=printSumNN, args=(math.inf, listOfPoints)).start() 
 
+# While the function input is awaiting input from user print sum runs
 input()
+# After input the loop condition is set to true so it stops
 NNisDone = True
 
 if (collectionOfDistanceNN[-1][0] > 6000):
@@ -199,8 +265,10 @@ filename = os.path.splitext(os.path.basename(filename))[0]
 
 outFile = finalPathToFile(filename, finalPathNN, collectionOfDistanceNN)
 
+print(f"Route written to disk as {outFile}")
+
 writeToDistanceFileNN(collectionOfDistanceNN)
 
-nameFileOne = "distanceFileRandomNN.txt"
+#nameFileOne = "distanceFileRandomNN.txt"
 
-analyzeDistance(nameFileOne)
+#analyzeDistance(nameFileOne)

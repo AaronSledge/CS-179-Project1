@@ -2,6 +2,7 @@ import math
 import numpy as np
 from euclideanDistance import Euclidean
 
+# This function inputs into the distance matrix distances calculated using the euclidean function
 def dist_matrix(points_array):
     n = len(points_array)
     matrix = [[float(0) for i in range(n)] for j in range(n)]
